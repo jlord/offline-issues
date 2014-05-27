@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "ghauth": "^0.1.1",
-    "github-api": "^0.7.0",
     "minimist": "^0.1.0",
     "mkdirp": "^0.5.0",
     "request": "^2.36.0"
