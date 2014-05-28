@@ -13,8 +13,6 @@ module.exports = function writemarkdown() {
 
   var issues = fs.readFileSync('comments.json')
   issues = JSON.parse(issues)
-  console.log(issues)
-  console.log(issues.length)
   issues.forEach(function(issue) {
     var filename = repoDetails(issue.url)
     var source = fs.readFileSync('issue.hbs')
@@ -29,7 +27,6 @@ module.exports = function writemarkdown() {
 }
 
 function repoDetails(issue) {
-  console.log('issue', issue)
   var a = issue.split('/')
   var filename =  a[3] + '-' + a[4] + '-' + a[6]
   return filename
