@@ -8,6 +8,8 @@ var headers = {"user-agent": "offline-issues module",}
 var pageNum = 1
 var repoNum = 1
 
+var issueData = []
+
 
 // {
 //   _: [ 'jlord/offline-issues', 'muan/github-gmail' ],
@@ -43,28 +45,90 @@ function parseRepo(options) {
     } else { repoDetails.name = userAndRepo[1] }
     options.repos.push(repoDetails)
   })
-  console.log(options)
+  // console.log(options)
   // do what's next
   // route off requests
   // makeRequest(pageNum, options)
   //options.repos.forEach(...)
-  options.repos.forEach(getIssue)
+  var counter = 1
+  options.repos.forEach(function buildData(repo) {
+    console.log("for each repo", counter, options.numberOf)
+    if (counter > options.numberOf) {
+      console.log(counter, options.numberOf)
+      writeData()
+    } else {
+      console.log("else")
+      getIssue(repo)
+      counter++
+    }
+  })
 }
 
 function getIssue(repo) {
     var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
     console.log("url", url)
-    request(url, {json: true, headers: headers}, getComments)
+    request(url, {json: true, headers: headers}, function(err, resp, body) {
+      if (err) return console.log(err)
+      loadIssue(body, repo)
+    })
 }
 
-function getComments(err, resp, body) {
-  if (err) return console.log(err)
-  // var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
+function loadIssue(body, repo) {
+  var issue = {}
+
+  // issue.id = body.id
+  // issue.url = body.html_url
+  // issue.title = body.title
+  // issue.createdBy = body.user.login
+  // issue.createdOn = body.created_at
+  // issue.body = body.body
+  // issue.state = body.state
+  // issue.comments = []
 
 
-  console.log(body)
+  issue[body.id]= {}
+  issue[body.id].url = body.html_url
+  issue[body.id].title = body.title
+  issue[body.id].createdBy = body.user.login
+  issue[body.id].createdOn = body.created_at
+  issue[body.id].body = body.body
+  issue[body.id].state = body.state
+
+  getComments(issue, repo)
+
+  // issueData.push(issue)
+  // console.log("issue data", issueData)
+  // cb
 }
 
+function getComments(issue, repo) {
+  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
+  request(url, {json: true, headers: headers}, function(err, resp, body) {
+    if (err) return console.log(err)
+    var id = Object.keys(issue)[0]
+    issue[id].comments = body
+    issueData.push(issue)
+    // console.log("ID", issueData)
+  })
+}
+
+function loadComments(body) {
+  console.log('comments', body)
+  // body.forEach(function(comment) {
+  //   issueData[comment.id].comments.push(comment)
+  // })
+  // writeData()
+}
+
+function writeData() {
+  console.log('writing data')
+  var data = JSON.stringify(issueData)
+  console.log(data)
+  fs.writeFile('comments.json', data, function (err) {
+  if (err) throw err;
+  console.log('It\'s saved!');
+});
+}
 
 
 
