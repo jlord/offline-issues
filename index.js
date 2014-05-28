@@ -74,7 +74,7 @@ function getComments(issue, repo) {
 }
 
 function writeData(repo) {
-  console.log('writing data')
+  console.log('Writing Data')
   var data = JSON.stringify(issueData, null, ' ')
   fs.writeFile('comments.json', data, function (err) {
     if (err) return console.log(err)

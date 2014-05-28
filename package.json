@@ -1,12 +1,12 @@
 {
   "name": "offline-issues",
   "version": "0.0.0",
-  "description": "",
+  "description": "Don't use this yet!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jessica Lord",
   "bin": "cli.js",
   "license": "ISC",
   "dependencies": {

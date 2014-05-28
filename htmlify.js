@@ -17,13 +17,11 @@ module.exports = function htmlify(markdown, filename) {
 
   mkdirp('html', function (err) {
     if (err) return console.log(err)
-    else console.log('make md file')
   })
-
 
   var html = marked(markdown)
   fs.writeFile('html/' + filename + '.html', html, function (err) {
     if (err) return console.log(err)
-    console.log('Wrote' + filename + '.html');
+    console.log('Wrote ' + filename + '.html');
   })
 }

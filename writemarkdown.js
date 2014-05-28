@@ -8,7 +8,6 @@ module.exports = function writemarkdown() {
 
   mkdirp('md', function (err) {
     if (err) return console.log(err)
-    else console.log('make md file')
   })
 
   var issues = fs.readFileSync('comments.json')
@@ -20,7 +19,7 @@ module.exports = function writemarkdown() {
     var result = template(issue)
     fs.writeFile('md/' + filename + '.md', result, function (err) {
       if (err) return console.log(err)
-      console.log('Wrote' + filename + '.md');
+      console.log('Wrote ' + filename + '.md');
     })
     htmlify(result, filename)
   })
