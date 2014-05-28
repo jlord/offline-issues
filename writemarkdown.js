@@ -9,11 +9,10 @@ var htmlify = require('./htmlify.js')
     var source = fs.readFileSync('issue.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
-    console.log(result)
     fs.writeFile('issue' + i + '.md', result, function (err) {
-      if (err) console.log(errs)
+      if (err) return console.log(err)
       console.log('Wrote' + ' issue' + i + '.md');
     })
-    htmlify(result)
+    htmlify(result, i)
   })
 //}

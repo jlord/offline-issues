@@ -12,7 +12,10 @@ marked.setOptions({
   smartypants: false
 })
 
-module.exports = function htmlify(markdown) {
+module.exports = function htmlify(markdown, i) {
   var html = marked(markdown)
-  console.log(html)
+  fs.writeFile('issue' + i + '.html', html, function (err) {
+    if (err) return console.log(err)
+    console.log('Wrote' + ' issue' + i + '.html');
+  })
 }

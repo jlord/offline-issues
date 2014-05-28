@@ -1,5 +1,14 @@
-Title: {{title}}
+# [{{title}}]({{url}})
+
+> state: **{{state}}** opened by: **{{createdBy}}** on: **{{createdOn}}**
+
+{{body}}
+
+### Comments
 
 {{#comments}}
-  Who:{{user.login}}
+---
+> from: [**{{user.login}}**]({{html_url}}) on: **{{created_at}}**
+
+{{body}}
 {{/comments}}
