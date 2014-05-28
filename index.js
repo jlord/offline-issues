@@ -3,33 +3,18 @@ var mkdirp =  require('mkdirp')
 var fs = require('fs')
 
 var base = 'https://api.github.com'
-
 var headers = {"user-agent": "offline-issues module",}
-var pageNum = 1
-var repoNum = 1
 
 var issueData = []
-
 var counter = 1
 var done = ''
 
-// {
-//   _: [ 'jlord/offline-issues', 'muan/github-gmail' ],
-//   by: 'jlord', l: [help, easy],
-//   all: true, o: true, c: true,
-//
-// }
-
 module.exports = function getIssues(token, options, cb) {
   if (!options._) return cb("No repository given.")
+
   parseRepo(options)
-
   headers["Authorization"] = 'token ' + token.token
-
-  // https://api.github.com/repos/github/
-
 }
-
 
 function parseRepo(options) {
   done = options._.length
@@ -47,35 +32,19 @@ function parseRepo(options) {
     } else { repoDetails.name = userAndRepo[1] }
     options.repos.push(repoDetails)
   })
-  // console.log(options)
-  // do what's next
-  // route off requests
-  // makeRequest(pageNum, options)
-  //options.repos.forEach(...)
-  options.repos.forEach(function buildData(repo, i) {
-    console.log(options.repos.length, issueData.length)
-    console.log("for each repo", i, options.repos.length)
-    if (i > options.repos.length) {
-      console.log(i, options.repos.length)
-      writeData()
-    } else {
-      console.log("else")
-      getIssue(repo)
-    }
-  })
+  options.repos.forEach(getIssue)
 }
 
 function getIssue(repo) {
-    var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
-    console.log("url", url)
-    request(url, {json: true, headers: headers}, function(err, resp, body) {
-      if (err) return console.log(err)
-      loadIssue(body, repo)
-    })
+  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
+  request(url, {json: true, headers: headers}, function(err, resp, body) {
+    if (err) return console.log(err)
+    loadIssue(body, repo)
+  })
 }
 
 function loadIssue(body, repo) {
-  // var issue = {}
+  var issue = {}
 
   // issue.id = body.id
   // issue.url = body.html_url
@@ -86,8 +55,7 @@ function loadIssue(body, repo) {
   // issue.state = body.state
   // issue.comments = []
 
-
-  var issue[body.id]= {}
+  issue[body.id]= {}
   issue[body.id].url = body.html_url
   issue[body.id].title = body.title
   issue[body.id].createdBy = body.user.login
@@ -96,47 +64,32 @@ function loadIssue(body, repo) {
   issue[body.id].state = body.state
 
   getComments(issue, repo)
-
-  // issueData.push(issue)
-  // console.log("issue data", issueData)
-  // cb
 }
 
 function getComments(issue, repo) {
   var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
+
   request(url, {json: true, headers: headers}, function(err, resp, body) {
     if (err) return console.log(err)
+
     var id = Object.keys(issue)[0]
     issue[id].comments = body
     issueData.push(issue)
-    console.log(counter, done)
+
     if (counter === done) {
       writeData()
     } else counter++
-
-    // console.log("ID", issueData)
   })
-}
-
-function loadComments(body) {
-  console.log('comments', body)
-  // body.forEach(function(comment) {
-  //   issueData[comment.id].comments.push(comment)
-  // })
-  // writeData()
 }
 
 function writeData() {
   console.log('writing data')
   var data = JSON.stringify(issueData, null, ' ')
-  // console.log(data)
   fs.writeFile('comments.json', data, function (err) {
   if (err) throw err;
   console.log('It\'s saved!');
-});
+})
 }
-
-
 
 // function buildQuery(options) {
 //   var issuesAll = ''
