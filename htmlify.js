@@ -1,5 +1,6 @@
 var marked = require('marked')
 var fs = require('fs')
+var mkdirp =  require('mkdirp')
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -12,10 +13,17 @@ marked.setOptions({
   smartypants: false
 })
 
-module.exports = function htmlify(markdown, i) {
-  var html = marked(markdown)
-  fs.writeFile('issue' + i + '.html', html, function (err) {
+module.exports = function htmlify(markdown, filename) {
+
+  mkdirp('html', function (err) {
     if (err) return console.log(err)
-    console.log('Wrote' + ' issue' + i + '.html');
+    else console.log('make md file')
+  })
+
+
+  var html = marked(markdown)
+  fs.writeFile('html/' + filename + '.html', html, function (err) {
+    if (err) return console.log(err)
+    console.log('Wrote' + filename + '.html');
   })
 }

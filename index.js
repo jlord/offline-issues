@@ -1,5 +1,4 @@
 var request = require('request')
-var mkdirp =  require('mkdirp')
 var fs = require('fs')
 var writemarkdown = require('./writemarkdown.js')
 
@@ -56,14 +55,6 @@ function loadIssue(body, repo) {
   issue.state = body.state
   issue.comments = []
 
-  // issue[body.id]= {}
-  // issue[body.id].url = body.html_url
-  // issue[body.id].title = body.title
-  // issue[body.id].createdBy = body.user.login
-  // issue[body.id].createdOn = body.created_at
-  // issue[body.id].body = body.body
-  // issue[body.id].state = body.state
-
   getComments(issue, repo)
 }
 
@@ -77,19 +68,19 @@ function getComments(issue, repo) {
     issueData.push(issue)
 
     if (counter === done) {
-      writeData()
+      writeData(repo)
     } else counter++
   })
 }
 
-function writeData() {
+function writeData(repo) {
   console.log('writing data')
   var data = JSON.stringify(issueData, null, ' ')
   fs.writeFile('comments.json', data, function (err) {
-  if (err) throw err;
-  console.log('It\'s saved!');
-  // writemarkdown
-})
+    if (err) return console.log(err)
+    console.log('It\'s saved!')
+    writemarkdown()
+  })
 }
 
 // function buildQuery(options) {
