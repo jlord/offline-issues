@@ -2,7 +2,7 @@
 
 var ghauth = require('ghauth')
 var minimist = require('minimist')
-var getIssues = require('./ index.js')
+var getIssues = require('./index.js')
 
 var options = minimist(process.argv.slice(2));
 
@@ -17,11 +17,11 @@ note       : 'This token is for the offline-issues module from NPM'
 
 ghauth(ghAuthOptions, function(err, token) {
   if (err) console.log(err)
-  console.log([argv, token])
-  // getIssues(token, options, function(err, message) {
-  //   if (err) console.log(err, message)
-  //   console.log("Done, go see!")
-  // })
+  console.log([options, token])
+  getIssues(token, options, function(err, message) {
+    if (err) console.log(err, message)
+    console.log("Done, go see!")
+  })
 
   // var token = { user: 'username',
   // token: 'TOKEN' }
