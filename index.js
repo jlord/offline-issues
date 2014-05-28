@@ -75,7 +75,7 @@ function getIssue(repo) {
 }
 
 function loadIssue(body, repo) {
-  var issue = {}
+  // var issue = {}
 
   // issue.id = body.id
   // issue.url = body.html_url
@@ -87,7 +87,7 @@ function loadIssue(body, repo) {
   // issue.comments = []
 
 
-  issue[body.id]= {}
+  var issue[body.id]= {}
   issue[body.id].url = body.html_url
   issue[body.id].title = body.title
   issue[body.id].createdBy = body.user.login
