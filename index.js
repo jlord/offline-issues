@@ -1,6 +1,7 @@
 var request = require('request')
 var mkdirp =  require('mkdirp')
 var fs = require('fs')
+var writemarkdown = require('./writemarkdown.js')
 
 var base = 'https://api.github.com'
 var headers = {"user-agent": "offline-issues module",}
@@ -46,22 +47,22 @@ function getIssue(repo) {
 function loadIssue(body, repo) {
   var issue = {}
 
-  // issue.id = body.id
-  // issue.url = body.html_url
-  // issue.title = body.title
-  // issue.createdBy = body.user.login
-  // issue.createdOn = body.created_at
-  // issue.body = body.body
-  // issue.state = body.state
-  // issue.comments = []
+  issue.id = body.id
+  issue.url = body.html_url
+  issue.title = body.title
+  issue.createdBy = body.user.login
+  issue.createdOn = body.created_at
+  issue.body = body.body
+  issue.state = body.state
+  issue.comments = []
 
-  issue[body.id]= {}
-  issue[body.id].url = body.html_url
-  issue[body.id].title = body.title
-  issue[body.id].createdBy = body.user.login
-  issue[body.id].createdOn = body.created_at
-  issue[body.id].body = body.body
-  issue[body.id].state = body.state
+  // issue[body.id]= {}
+  // issue[body.id].url = body.html_url
+  // issue[body.id].title = body.title
+  // issue[body.id].createdBy = body.user.login
+  // issue[body.id].createdOn = body.created_at
+  // issue[body.id].body = body.body
+  // issue[body.id].state = body.state
 
   getComments(issue, repo)
 }
@@ -72,8 +73,7 @@ function getComments(issue, repo) {
   request(url, {json: true, headers: headers}, function(err, resp, body) {
     if (err) return console.log(err)
 
-    var id = Object.keys(issue)[0]
-    issue[id].comments = body
+    issue.comments = body
     issueData.push(issue)
 
     if (counter === done) {
@@ -88,6 +88,7 @@ function writeData() {
   fs.writeFile('comments.json', data, function (err) {
   if (err) throw err;
   console.log('It\'s saved!');
+  // writemarkdown
 })
 }
 
