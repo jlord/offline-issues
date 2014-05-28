@@ -10,6 +10,8 @@ var repoNum = 1
 
 var issueData = []
 
+var counter = 1
+var done = ''
 
 // {
 //   _: [ 'jlord/offline-issues', 'muan/github-gmail' ],
@@ -30,7 +32,7 @@ module.exports = function getIssues(token, options, cb) {
 
 
 function parseRepo(options) {
-  options.numberOf = options._.length
+  done = options._.length
   options.repos = []
 
   options._.forEach(function(repo) {
@@ -50,16 +52,15 @@ function parseRepo(options) {
   // route off requests
   // makeRequest(pageNum, options)
   //options.repos.forEach(...)
-  var counter = 1
-  options.repos.forEach(function buildData(repo) {
-    console.log("for each repo", counter, options.numberOf)
-    if (counter > options.numberOf) {
-      console.log(counter, options.numberOf)
+  options.repos.forEach(function buildData(repo, i) {
+    console.log(options.repos.length, issueData.length)
+    console.log("for each repo", i, options.repos.length)
+    if (i > options.repos.length) {
+      console.log(i, options.repos.length)
       writeData()
     } else {
       console.log("else")
       getIssue(repo)
-      counter++
     }
   })
 }
@@ -108,6 +109,11 @@ function getComments(issue, repo) {
     var id = Object.keys(issue)[0]
     issue[id].comments = body
     issueData.push(issue)
+    console.log(counter, done)
+    if (counter === done) {
+      writeData()
+    } else counter++
+
     // console.log("ID", issueData)
   })
 }
@@ -122,8 +128,8 @@ function loadComments(body) {
 
 function writeData() {
   console.log('writing data')
-  var data = JSON.stringify(issueData)
-  console.log(data)
+  var data = JSON.stringify(issueData, null, ' ')
+  // console.log(data)
   fs.writeFile('comments.json', data, function (err) {
   if (err) throw err;
   console.log('It\'s saved!');
