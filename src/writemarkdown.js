@@ -1,8 +1,6 @@
 var fs = require('fs')
 var handlebars = require('handlebars')
-var htmlify = require('./writehtml.js')
 var mkdirp =  require('mkdirp')
-
 
 module.exports = function writemarkdown() {
 
@@ -22,7 +20,7 @@ module.exports = function writemarkdown() {
     })
   })
   console.log('Wrote markdown files')
-  
+
 }
 
 function repoDetails(issue) {
