@@ -9,13 +9,13 @@
   </head>
   <body>
     <header>
-      <h1>{{{title}}}</a>
+      <h1>{{title}}</a>
     </header>
 
     <div class="comments-container">
     {{#comments}}
-    <p class="meta">from: [**{{user.login}}**]({{html_url}}) on: **{{created_at}}**<p>
-    <p>{{body}}</p>
+    <p class="meta">from: <a href="{{html_url}}"{{user.login}}</a> on: {{created_at}}</p>
+    <p>{{{body}}}</p>
     {{/comments}}
     </div>
 

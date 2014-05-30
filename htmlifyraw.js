@@ -3,6 +3,17 @@ var mkdirp =  require('mkdirp')
 var handlebars = require('handlebars')
 var marked = require('marked')
 
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+})
+
 module.exports = function htmlify(markdown, filename) {
 
   mkdirp('html', function (err) {
@@ -17,7 +28,6 @@ module.exports = function htmlify(markdown, filename) {
     var source = fs.readFileSync('html.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
-    result = marked(result)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
       if (err) return console.log(err)
       console.log('Wrote ' + filename + '.html');
@@ -32,8 +42,9 @@ function repoDetails(issue) {
 }
 
 function parseBody(issue) {
-  issue.comments.forEach(function(issue) {
+  issue.comments = issue.comments.map(function(issue) {
     issue.body = marked(issue.body)
+    return issue
   })
   return issue
 }
