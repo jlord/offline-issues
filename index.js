@@ -1,6 +1,7 @@
 var request = require('request')
 var fs = require('fs')
 var writemarkdown = require('./writemarkdown.js')
+var writehtml = require('./htmlifyraw.js')
 
 var base = 'https://api.github.com'
 var headers = {"user-agent": "offline-issues module",}
@@ -10,10 +11,9 @@ var counter = 1
 var done = ''
 
 module.exports = function getIssues(token, options, cb) {
-  if (!options._) return cb("No repository given.")
-
-  parseRepo(options)
   headers["Authorization"] = 'token ' + token.token
+  if (!options._) return cb("No repository given.")
+  parseRepo(options)
 }
 
 function parseRepo(options) {
@@ -38,7 +38,7 @@ function parseRepo(options) {
 function getIssue(repo) {
   var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
   request(url, {json: true, headers: headers}, function(err, resp, body) {
-    if (err) return console.log(err)
+    if (err) return console.log('request', err)
     loadIssue(body, repo)
   })
 }
@@ -49,7 +49,7 @@ function loadIssue(body, repo) {
   issue.id = body.id
   issue.url = body.html_url
   issue.title = body.title
-  issue.createdBy = body.user.login
+  issue.createdBy = body.user.login || body.head.user.login
   issue.createdOn = body.created_at
   issue.body = body.body
   issue.state = body.state
@@ -80,6 +80,7 @@ function writeData(repo) {
     if (err) return console.log(err)
     console.log('It\'s saved!')
     writemarkdown()
+    writehtml()
   })
 }
 

@@ -18,7 +18,6 @@ $ offline-issues USER/REPO#0
 $ offline-issues jlord/offline-issues#1
 # You can do multiple:
 $ offline-issues jlord/offline-issues#1 muan/github-gmail/#4
-
 ```
 
 Whatever directory you are in, it will create a `md` and `html` folder with the resulting files.
