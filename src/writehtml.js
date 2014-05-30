@@ -33,7 +33,8 @@ module.exports = function htmlify(markdown, filename) {
     })
   })
   console.log('Wrote html files')
-  }
+
+}
 
 function repoDetails(issue) {
   var a = issue.split('/')
@@ -41,6 +42,9 @@ function repoDetails(issue) {
   return filename
 }
 
+// since comments are in Markdown
+// we should parse them into HTML
+// before putting them in the template
 function parseBody(issue) {
   issue.body = marked(issue.body)
   issue.comments = issue.comments.map(function(issue) {
