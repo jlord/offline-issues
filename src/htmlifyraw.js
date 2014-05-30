@@ -42,6 +42,7 @@ function repoDetails(issue) {
 }
 
 function parseBody(issue) {
+  issue.body = marked(issue.body)
   issue.comments = issue.comments.map(function(issue) {
     issue.body = marked(issue.body)
     return issue
