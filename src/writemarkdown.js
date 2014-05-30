@@ -19,10 +19,9 @@ module.exports = function writemarkdown() {
     var result = template(issue)
     fs.writeFile('md/' + filename + '.md', result, function (err) {
       if (err) return console.log(err)
-      console.log('Wrote ' + filename + '.md');
     })
-    // htmlify(result, filename)
   })
+  console.log('Wrote markdown files')
 }
 
 function repoDetails(issue) {

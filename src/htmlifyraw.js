@@ -30,9 +30,9 @@ module.exports = function htmlify(markdown, filename) {
     var result = template(issue)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
       if (err) return console.log(err)
-      console.log('Wrote ' + filename + '.html');
     })
   })
+  console.log('Wrote html files')
   }
 
 function repoDetails(issue) {
