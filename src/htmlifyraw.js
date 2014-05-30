@@ -25,7 +25,7 @@ module.exports = function htmlify(markdown, filename) {
   issues.forEach(function(issue) {
     issue = parseBody(issue)
     var filename = repoDetails(issue.url)
-    var source = fs.readFileSync('templates/html.hbs')
+    var source = fs.readFileSync(__dirname + '/templates/html.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
