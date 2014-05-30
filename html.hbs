@@ -14,8 +14,8 @@
 
     <div class="comments-container">
     {{#comments}}
-    <p class="meta">from: <a href="{{html_url}}"{{user.login}}</a> on: {{created_at}}</p>
-    <p>{{{body}}}</p>
+    <p class="meta">from: <a href="{{html_url}}">{{user.login}}</a> on: {{created_at}}</p>
+    {{{body}}}
     {{/comments}}
     </div>
 
