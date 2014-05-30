@@ -12,11 +12,11 @@ var done = ''
 
 module.exports = function getIssues(token, options, cb) {
   headers["Authorization"] = 'token ' + token.token
-  if (!options._) return cb("No repository given.")
-  parseRepo(options)
+  if (!options._) return cb(null, "No repository given.")
+  parseRepo(options, cb)
 }
 
-function parseRepo(options) {
+function parseRepo(options, cb) {
   done = options._.length
   options.repos = []
 
@@ -32,18 +32,20 @@ function parseRepo(options) {
     } else { repoDetails.name = userAndRepo[1] }
     options.repos.push(repoDetails)
   })
-  options.repos.forEach(getIssue)
-}
-
-function getIssue(repo) {
-  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
-  request(url, {json: true, headers: headers}, function(err, resp, body) {
-    if (err) return console.log('request', err)
-    loadIssue(body, repo)
+  options.repos.forEach(function(repo) {
+    getIssue(repo, cb)
   })
 }
 
-function loadIssue(body, repo) {
+function getIssue(repo, cb) {
+  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
+  request(url, {json: true, headers: headers}, function(err, resp, body) {
+    if (err) return cb(err, "Error in request for issue.")
+    loadIssue(body, repo, cb)
+  })
+}
+
+function loadIssue(body, repo, cb) {
   var issue = {}
 
   issue.id = body.id
@@ -55,30 +57,30 @@ function loadIssue(body, repo) {
   issue.state = body.state
   issue.comments = []
 
-  getComments(issue, repo)
+  getComments(issue, repo, cb)
 }
 
-function getComments(issue, repo) {
+function getComments(issue, repo, cb) {
   var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
 
   request(url, {json: true, headers: headers}, function(err, resp, body) {
-    if (err) return console.log(err)
+    if (err) return cb(err, "Error in request for comments.")
 
     issue.comments = body
     issueData.push(issue)
 
     if (counter === done) {
-      writeData(repo)
+      writeData(repo, cb)
     } else counter++
   })
 }
 
-function writeData(repo) {
+function writeData(repo, cb) {
   var data = JSON.stringify(issueData, null, ' ')
   fs.writeFile('comments.json', data, function (err) {
-    if (err) return console.log(err)
-    console.log('Wrote data')
-    writemarkdown()
-    writehtml()
+    if (err) return cb(err, "Error in writing data file.")
+    cb(null, 'Wrote data')
+    writemarkdown(cb)
+    writehtml(cb)
   })
 }

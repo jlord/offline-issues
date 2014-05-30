@@ -14,10 +14,10 @@ marked.setOptions({
   smartypants: false
 })
 
-module.exports = function htmlify(markdown, filename) {
+module.exports = function writehtml(cb) {
 
   mkdirp('html', function (err) {
-    if (err) return console.log(err)
+    if (err) return cb(err, "Error writing HTML directory.")
   })
 
   var issues = fs.readFileSync('comments.json')
@@ -29,10 +29,10 @@ module.exports = function htmlify(markdown, filename) {
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
-      if (err) return console.log(err)
+      if (err) return cb(err, "Error writing HTML file.")
     })
   })
-  console.log('Wrote html files')
+  cb(null, 'Wrote html files')
 
 }
 

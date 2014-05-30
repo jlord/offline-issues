@@ -17,10 +17,9 @@ note       : 'This token is for the offline-issues module from NPM'
 
 ghauth(ghAuthOptions, function(err, token) {
   if (err) console.log(err)
-  // console.log([options, token])
   getIssues(token, options, function(err, message) {
     if (err) console.log(err, message)
-    console.log("Done, go see!")
+    console.log(message)
   })
 
   // var token = { user: 'username',

@@ -2,10 +2,10 @@ var fs = require('fs')
 var handlebars = require('handlebars')
 var mkdirp =  require('mkdirp')
 
-module.exports = function writemarkdown() {
+module.exports = function writemarkdown(cb) {
 
   mkdirp('md', function (err) {
-    if (err) return console.log(err)
+    if (err) return cb(err, "Error creaking md directory.")
   })
 
   var issues = fs.readFileSync('comments.json')
@@ -16,10 +16,10 @@ module.exports = function writemarkdown() {
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('md/' + filename + '.md', result, function (err) {
-      if (err) return console.log(err)
+      if (err) return cb(err, "Error writing md file.")
     })
   })
-  console.log('Wrote markdown files')
+  cb(null, 'Wrote markdown files')
 
 }
 
