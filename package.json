@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jessica Lord",
-  "bin": "cli.js",
+  "bin": "src/cli.js",
   "license": "ISC",
   "dependencies": {
     "ghauth": "^0.1.1",
