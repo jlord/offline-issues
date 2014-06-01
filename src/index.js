@@ -49,7 +49,7 @@ module.exports = function getIssues(token, options, cb) {
     var origRepo = repo.full
     var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues'
     if (repo.issue === 'all') {
-      url = url + '?state=all'
+      url = url + '?state=all&per_page=100'
     } else url = url + '/' + repo.issue
     request(url, {json: true, headers: headers}, function(err, resp, body) {
       if (err) return cb(err, "Error in request for issue.")

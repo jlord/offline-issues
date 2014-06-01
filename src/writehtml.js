@@ -2,6 +2,8 @@ var fs = require('fs')
 var mkdirp =  require('mkdirp')
 var handlebars = require('handlebars')
 var marked = require('marked')
+var cpr = require('cpr')
+var path = require('path')
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -18,6 +20,11 @@ module.exports = function writehtml(cb) {
 
   mkdirp('html', function (err) {
     if (err) return cb(err, "Error writing HTML directory.")
+  })
+  
+  var from = path.resolve(__dirname , ".." , 'static')
+  cpr(from, './html', function(err, files) {
+    if (err) return cb(err, "Error copying directory.")
   })
 
   var issues = fs.readFileSync('comments.json')

@@ -7,12 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jessica Lord",
-  "contributors": ["Mu-An Chiou"],
+  "contributors": [
+    "Mu-An Chiou"
+  ],
   "bin": {
     "offline-issues": "src/cli.js"
   },
   "license": "ISC",
   "dependencies": {
+    "cpr": "^0.2.0",
     "ghauth": "^0.1.1",
     "handlebars": "^2.0.0-alpha.4",
     "marked": "^0.3.2",
@@ -22,7 +25,9 @@
     "run-parallel": "^1.0.0"
   },
   "keywords": [
-    "GitHub", "Issues", "Offline"
+    "GitHub",
+    "Issues",
+    "Offline"
   ],
   "devDependencies": {},
   "repository": {
