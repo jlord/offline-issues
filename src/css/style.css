@@ -75,8 +75,8 @@ time {
   color: #fff;
   font-weight: bold;
   margin-right: 10px;
+  text-transform: capitalize;
 }
 
-.badge.closed {
-  background: #c00;
-}
+.badge.closed { background: #c00; }
+.badge.open { background: #5c5; }
