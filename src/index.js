@@ -32,8 +32,12 @@ function parseRepo(options, cb) {
       var repoAndIssue = userAndRepo[1].split('#')
       repoDetails.name = repoAndIssue[0]
       repoDetails.issue = repoAndIssue[1]
-    } else { repoDetails.name = userAndRepo[1] }
+    } else {
+      repoDetails.name = userAndRepo[1]
+      repoDetails.issue = 'all'
+    }
     options.repos.push(repoDetails)
+    console.log(repoDetails)
   })
   options.repos.forEach(function(repo) {
     getIssue(repo, cb)
@@ -41,9 +45,18 @@ function parseRepo(options, cb) {
 }
 
 function getIssue(repo, cb) {
-  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
+  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues'
+  if (repo.issue === 'all') {
+    url = url + '?state=all'
+  } else url = url + '/' + repo.issue
+  console.log(url)
   request(url, {json: true, headers: headers}, function(err, resp, body) {
     if (err) return cb(err, "Error in request for issue.")
+    if (repo.issue === 'all') {
+      return body.forEach(function(issue) {
+        loadIssue(issue, repo, cb)
+      })
+    }
     loadIssue(body, repo, cb)
   })
 }
@@ -60,13 +73,18 @@ function loadIssue(body, repo, cb) {
   issue.state = body.state
   issue.comments = []
   issue.quicklink = repo.full
+  issue.comments_url = body.comments_url
 
   getComments(issue, repo, cb)
 }
 
 function getComments(issue, repo, cb) {
-  var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
-
+  // console.log('get coms', issue)
+  if (repo.issue === 'all') {
+    var url = issue.comments_url
+  } else {
+    var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
+  }
   request(url, {json: true, headers: headers}, function(err, resp, body) {
     if (err) return cb(err, "Error in request for comments.")
 
