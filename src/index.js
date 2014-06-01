@@ -11,7 +11,6 @@ var counter = 1
 var done = ''
 
 module.exports = function getIssues(token, options, cb) {
-  console.log(options)
   headers["Authorization"] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
     return writehtml(cb)
@@ -72,6 +71,9 @@ function getComments(issue, repo, cb) {
     if (err) return cb(err, "Error in request for comments.")
 
     issue.comments = body
+    issue.comments.forEach(function(comment) {
+      comment.created_at = new Date(comment.created_at).toLocaleDateString()
+    })
     issueData.push(issue)
 
     if (counter === done) {
