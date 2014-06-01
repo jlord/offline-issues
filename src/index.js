@@ -56,10 +56,11 @@ function loadIssue(body, repo, cb) {
   issue.url = body.html_url
   issue.title = body.title
   issue.createdBy = body.user.login || body.head.user.login
-  issue.createdOn = body.created_at
+  issue.createdOn = new Date(body.created_at).toLocaleDateString()
   issue.body = body.body
   issue.state = body.state
   issue.comments = []
+  issue.quicklink = repo.full
 
   getComments(issue, repo, cb)
 }
