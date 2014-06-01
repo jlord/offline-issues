@@ -5,19 +5,20 @@
     <title>{{title}}</title>
   </head>
   <body>
-    <header>
-      <h1>{{title}}</a>
-    </header>
-    <div class="issue">
-    {{{body}}}
-    </div>
+    <div class="container">
+      <header>
+        <h1>{{title}}</a>
+      </header>
+      <div class="issue">
+      {{{body}}}
+      </div>
 
-    <div class="comments-container">
-    {{#comments}}
-    <p class="meta">from: <a href="{{html_url}}">{{user.login}}</a> on: {{created_at}}</p>
-    {{{body}}}
-    {{/comments}}
+      <div class="comments-container">
+      {{#comments}}
+      <p class="meta">from: <a href="{{html_url}}">{{user.login}}</a> on: {{created_at}}</p>
+      {{{body}}}
+      {{/comments}}
+      </div>
     </div>
-
   </body>
 </html>

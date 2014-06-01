@@ -11,8 +11,12 @@ var counter = 1
 var done = ''
 
 module.exports = function getIssues(token, options, cb) {
+  console.log(options)
   headers["Authorization"] = 'token ' + token.token
-  if (!options._) return cb(null, "No repository given.")
+  if (options._.length === 0 && options.html) {
+    return writehtml(cb)
+  }
+  if (options._.length === 0) return cb(null, "No repository given.")
   parseRepo(options, cb)
 }
 
