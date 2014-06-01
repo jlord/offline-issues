@@ -1,3 +1,63 @@
 /* hi */
-body {font-family: 'Helvetica Neue', 'Arial', sans-serif;}
-.container {width: 790px; margin: 0 auto; padding: 20px;}
+/* :wave: */
+
+body {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  line-height: 1.6em;
+  font-size: 13px;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #08c;
+}
+
+.container {
+  width: 790px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.comments {}
+
+.comment {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.meta {
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 15px;
+}
+
+.person {
+  font-weight: bold;
+}
+
+.body {
+  padding: 15px;
+}
+
+.body > :first-child { margin-top: 0; }
+.body > :last-child { margin-bottom: 0; }
+
+time {
+  float: right;
+  font-size: 12px;
+  color: #999;
+}
+
+.badge {
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: #999;
+  color: #fff;
+  font-weight: bold;
+}
+
+.badge.closed {
+  background: #c00;
+}

@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -7,17 +8,32 @@
   <body>
     <div class="container">
       <header>
+        <p>
+          <span class="badge {{state}}">{{state}}</span>
+          {{url}}
+        </p>
         <h1>{{title}}</a>
       </header>
-      <div class="issue">
-      {{{body}}}
-      </div>
+      <div class="comments">
+        <div class="comment">
+          <div class="meta">
+            <a class="person" href="https://github.com/{{createdBy}}">{{createdBy}}</a>
+            <time>{{createdOn}}</time>
+          </div>
+          <div class="body">{{{body}}}</div>
+        </div>
 
-      <div class="comments-container">
-      {{#comments}}
-      <p class="meta">from: <a href="{{html_url}}">{{user.login}}</a> on: {{created_at}}</p>
-      {{{body}}}
-      {{/comments}}
+        {{#comments}}
+        <div class="comment">
+          <div class="meta">
+            <a class="person" href="{{user.html_url}}">
+              {{user.login}}
+            </a>
+            <time>{{created_at}}</time>
+          </div>
+          <div class="body">{{{body}}}</div>
+        </div>
+        {{/comments}}
       </div>
     </div>
   </body>
