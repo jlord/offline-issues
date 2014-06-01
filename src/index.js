@@ -9,14 +9,14 @@ var headers = {"user-agent": "offline-issues module"}
 
 module.exports = function getIssues(token, options, cb) {
   var issueData = []
-  
+
   headers["Authorization"] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
     return writehtml(cb)
   }
   if (options._.length === 0) return cb(null, "No repository given.")
   parseRepo(options, cb)
-  
+
   function parseRepo(options, cb) {
     options.repos = []
 
@@ -34,7 +34,6 @@ module.exports = function getIssues(token, options, cb) {
         repoDetails.issue = 'all'
       }
       options.repos.push(repoDetails)
-      console.log(repoDetails)
     })
     var functionsToDo = options.repos.map(function(repo) {
       return function(cb) {
@@ -47,11 +46,11 @@ module.exports = function getIssues(token, options, cb) {
   }
 
   function getIssue(repo, cb) {
+    var origRepo = repo.full
     var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues'
     if (repo.issue === 'all') {
       url = url + '?state=all'
     } else url = url + '/' + repo.issue
-    console.log(url)
     request(url, {json: true, headers: headers}, function(err, resp, body) {
       if (err) return cb(err, "Error in request for issue.")
       if (repo.issue === 'all') {
@@ -78,20 +77,21 @@ module.exports = function getIssues(token, options, cb) {
     issue.body = body.body
     issue.state = body.state
     issue.comments = []
-    issue.quicklink = repo.full
     issue.comments_url = body.comments_url
+
+    if (repo.issue === 'all') {
+      issue.quicklink = repo.full + "#" + body.html_url.split('/').pop()
+    } else issue.quicklink = repo.full
 
     getComments(issue, repo, cb)
   }
 
   function getComments(issue, repo, cb) {
-    // console.log('get coms', issue)
     if (repo.issue === 'all') {
       var url = issue.comments_url
     } else {
       var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
     }
-    console.log(url)
     request(url, {json: true, headers: headers}, function(err, resp, body) {
       if (err) return cb(err, "Error in request for comments.")
 
