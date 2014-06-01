@@ -13,6 +13,12 @@ a {
   color: #08c;
 }
 
+.url {
+  font-family: monospace;
+  font-size: 12px;
+  color: #999;
+}
+
 .container {
   width: 790px;
   margin: 0 auto;
@@ -25,6 +31,14 @@ a {
   border: 1px solid #e0e0e0;
   border-radius: 3px;
   margin-bottom: 20px;
+}
+
+.comment:not(:last-child):after {
+  content: ""; display: block;
+  margin-left: 15px;
+  border-left: 2px solid #f0f0f0;
+  height: 21px;
+  position: absolute;
 }
 
 .meta {
@@ -44,6 +58,10 @@ a {
 .body > :first-child { margin-top: 0; }
 .body > :last-child { margin-bottom: 0; }
 
+h1 {
+  font-weight: normal;
+}
+
 time {
   float: right;
   font-size: 12px;
@@ -56,6 +74,7 @@ time {
   background: #999;
   color: #fff;
   font-weight: bold;
+  margin-right: 10px;
 }
 
 .badge.closed {

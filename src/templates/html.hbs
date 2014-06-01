@@ -10,7 +10,7 @@
       <header>
         <p>
           <span class="badge {{state}}">{{state}}</span>
-          {{url}}
+          <span class="url">{{url}}</span>
         </p>
         <h1>{{title}}</a>
       </header>
@@ -20,7 +20,9 @@
             <a class="person" href="https://github.com/{{createdBy}}">{{createdBy}}</a>
             <time>{{createdOn}}</time>
           </div>
-          <div class="body">{{{body}}}</div>
+          <div class="body">
+            {{# if body}}{{{body}}}{{else}}<i>No body given.</i>{{/if}}
+          </div>
         </div>
 
         {{#comments}}
