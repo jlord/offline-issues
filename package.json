@@ -1,6 +1,6 @@
 {
   "name": "offline-issues",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Don't use this yet!",
   "main": "index.js",
   "scripts": {
