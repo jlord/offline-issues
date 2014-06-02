@@ -4,7 +4,7 @@ var ghauth = require('ghauth')
 var minimist = require('minimist')
 var getIssues = require('./index.js')
 
-var options = minimist(process.argv.slice(2));
+var options = minimist(process.argv.slice(2))
 
 var ghAuthOptions = {
  // ~/.config/[configName].json will store the token

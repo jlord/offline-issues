@@ -14,7 +14,7 @@ module.exports = function (token, options, cb) {
 
   headers["Authorization"] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
-    return writehtml(cb)
+    return writehtml(options, cb)
   }
   if (options._.length === 0) return cb(null, "No repository given.")
   parseRepo(options, cb)
@@ -43,7 +43,7 @@ module.exports = function (token, options, cb) {
       }
     })
     runParallel(functionsToDo, function(err) {
-      writeData(cb)
+      writeData(options, cb)
     })
   }
 
@@ -120,13 +120,13 @@ module.exports = function (token, options, cb) {
     })
   }
 
-  function writeData(cb) {
+  function writeData(options, cb) {
     var data = JSON.stringify(issueData, null, ' ')
     fs.writeFile('comments.json', data, function (err) {
       if (err) return cb(err, "Error in writing data file.")
       cb(null, 'Wrote data')
       writemarkdown(cb)
-      writehtml(cb)
+      writehtml(options, cb)
     })
   }
 }

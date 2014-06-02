@@ -16,16 +16,18 @@ marked.setOptions({
   smartypants: false
 })
 
-module.exports = function writehtml(cb) {
+module.exports = function writehtml(options, cb) {
 
   mkdirp('html', function (err) {
     if (err) return cb(err, "Error writing HTML directory.")
   })
-  
-  var from = path.resolve(__dirname , ".." , 'static')
-  cpr(from, './html', function(err, files) {
-    if (err) return cb(err, "Error copying directory.")
-  })
+
+  if (!options.nostatic) {
+    var from = path.resolve(__dirname , ".." , 'static')
+    cpr(from, './html', function(err, files) {
+      if (err) return cb(err, "Error copying directory.")
+    })
+  }
 
   var issues = fs.readFileSync('comments.json')
   issues = JSON.parse(issues)
