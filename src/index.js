@@ -62,6 +62,7 @@ module.exports = function (token, options, cb) {
     var url = base + "/repos/" + repo.user + '/' + repo.name + query + pagenum + limit
     request(url, {json: true, headers: headers}, function(err, resp, body) {
       if (err) return cb(err, "Error in request for issue.")
+      if (body.message) return cb(null, body)
       if (body.length === 0) {
         var functionsToDo = allIssues.map(function(issue) {
           return function(cb) {
