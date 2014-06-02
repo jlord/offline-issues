@@ -71,6 +71,7 @@ module.exports = function (token, options, cb) {
         runParallel(functionsToDo, cb)
         return
       } else {
+        if (body.message) return cb(body)
         body.forEach(function(issue) {
           return allIssues.push(issue)
         })
