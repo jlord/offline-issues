@@ -7,8 +7,10 @@ var writehtml = require('./writehtml.js')
 var base = 'https://api.github.com'
 var headers = {"user-agent": "offline-issues module"}
 
-module.exports = function getIssues(token, options, cb) {
+module.exports = function (token, options, cb) {
   var issueData = []
+  var pagenum = 1
+  var allIssues = []
 
   headers["Authorization"] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
@@ -37,7 +39,7 @@ module.exports = function getIssues(token, options, cb) {
     })
     var functionsToDo = options.repos.map(function(repo) {
       return function(cb) {
-        getIssue(repo, cb)
+        getIssues(repo, cb)
       }
     })
     runParallel(functionsToDo, function(err) {
@@ -45,26 +47,39 @@ module.exports = function getIssues(token, options, cb) {
     })
   }
 
-  function getIssue(repo, cb) {
-    var origRepo = repo.full
-    var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues'
-    if (repo.issue === 'all') {
-      url = url + '?state=all&per_page=100'
-    } else url = url + '/' + repo.issue
+  function getIssues(repo, cb) {
+    if (repo.issue === 'all') return theRequestLoop(repo, cb)
+    var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
     request(url, {json: true, headers: headers}, function(err, resp, body) {
       if (err) return cb(err, "Error in request for issue.")
-      if (repo.issue === 'all') {
-        var functionsToDo = body.map(function(issue) {
+      loadIssue(body, repo, cb)
+    })
+}
+
+  function theRequestLoop(repo, cb) {
+    var query = '/issues?page='
+    var limit = '&per_page=100'
+    var url = base + "/repos/" + repo.user + '/' + repo.name + query + pagenum + limit
+    request(url, {json: true, headers: headers}, function(err, resp, body) {
+      if (err) return cb(err, "Error in request for issue.")
+      if (body.length === 0) {
+        var functionsToDo = allIssues.map(function(issue) {
           return function(cb) {
             loadIssue(issue, repo, cb)
           }
         })
         runParallel(functionsToDo, cb)
         return
+      } else {
+        body.forEach(function(issue) {
+          return allIssues.push(issue)
+        })
+        pagenum++
+        getIssues(repo, cb)
       }
-      loadIssue(body, repo, cb)
-    })
-  }
+  })
+}
+
 
   function loadIssue(body, repo, cb) {
     var issue = {}
