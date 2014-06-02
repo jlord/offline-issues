@@ -35,9 +35,10 @@ a {
 
 .comment:not(:last-child):after {
   content: ""; display: block;
+  margin-top: 1px;
   margin-left: 15px;
   border-left: 2px solid #f0f0f0;
-  height: 21px;
+  height: 20px;
   position: absolute;
 }
 
