@@ -3,6 +3,7 @@ var fs = require('fs')
 var runParallel = require('run-parallel')
 var writemarkdown = require('./writemarkdown.js')
 var writehtml = require('./writehtml.js')
+var listofissues = require('./listofissues.js')
 
 var base = 'https://api.github.com'
 var headers = {"user-agent": "offline-issues module"}
@@ -15,6 +16,9 @@ module.exports = function (token, options, cb) {
   headers["Authorization"] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
     return writehtml(options, cb)
+  }
+  if (options._.length === 0 && options.list) {
+    return listofissues(cb)
   }
   if (options._.length === 0) return cb(null, "No repository given.")
   parseRepo(options, cb)
