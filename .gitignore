@@ -2,3 +2,4 @@ node_modules
 fullcommentdata.json
 fullissuedata.json
 myissuedata.json
+.DS_Store
