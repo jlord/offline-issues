@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "cpr": "^0.2.0",
-    "ghauth": "^0.1.1",
+    "ghauth": "^0.3.1",
     "handlebars": "^2.0.0-alpha.4",
     "marked": "^0.3.2",
     "minimist": "^0.1.0",
