@@ -6,7 +6,7 @@ Get your GitHub Issues offline! In Markdown and HTML.
 
 ## But how?
 
-- Have [Node.js]() installed on computer.
+- Have [Node.js](http://nodejs.org/) installed on computer.
 - Install this module `npm install -g offline-issues`
 - Authorize it by running `offline-issues` and following the commands
 - Use it to save Issues as .md and .html!
