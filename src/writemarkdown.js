@@ -5,7 +5,7 @@ var mkdirp =  require('mkdirp')
 module.exports = function writemarkdown(cb) {
 
   mkdirp('md', function (err) {
-    if (err) return cb(err, "Error creaking md directory.")
+    if (err) return cb(err, "Error creating md directory.")
   })
 
   var issues = fs.readFileSync('comments.json')
@@ -19,7 +19,7 @@ module.exports = function writemarkdown(cb) {
       if (err) return cb(err, "Error writing md file.")
     })
   })
-  cb(null, 'Wrote markdown files')
+  cb(null, 'Wrote markdown files.')
 
 }
 

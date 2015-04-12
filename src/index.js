@@ -126,7 +126,7 @@ module.exports = function (token, options, cb) {
     var data = JSON.stringify(issueData, null, ' ')
     fs.writeFile('comments.json', data, function (err) {
       if (err) return cb(err, "Error in writing data file.")
-      cb(null, 'Wrote data')
+      cb(null, 'Wrote data.')
       writemarkdown(cb)
       writehtml(options, cb)
     })

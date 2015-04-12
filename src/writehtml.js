@@ -41,7 +41,7 @@ module.exports = function writehtml(options, cb) {
       if (err) return cb(err, "Error writing HTML file.")
     })
   })
-  cb(null, 'Wrote html files')
+  cb(null, 'Wrote html files.')
 
 }
 
