@@ -12,12 +12,19 @@ module.exports = function writemarkdown(cb) {
   issues = JSON.parse(issues)
   issues.forEach(function(issue) {
     var filename = repoDetails(issue.url)
-    var source = fs.readFileSync(__dirname + '/templates/markdown.hbs')
+    var source = fs.readFileSync(__dirname + '/templates/issue.markdown.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('md/' + filename + '.md', result, function (err) {
       if (err) return cb(err, "Error writing md file.")
     })
+  })
+
+  var indexSource = fs.readFileSync(__dirname + '/templates/index.markdown.hbs')
+  var indexTemplate = handlebars.compile(indexSource.toString())
+  var result = indexTemplate(issues)
+  fs.writeFile('md/index.md', result, function (err) {
+    if (err) return cb(err, "Error writing md file.")
   })
   cb(null, 'Wrote markdown files.')
 

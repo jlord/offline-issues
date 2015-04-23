@@ -34,12 +34,19 @@ module.exports = function writehtml(options, cb) {
   issues.forEach(function(issue) {
     issue = parseBody(issue)
     var filename = repoDetails(issue.url)
-    var source = fs.readFileSync(__dirname + '/templates/html.hbs')
+    var source = fs.readFileSync(__dirname + '/templates/issue.html.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
       if (err) return cb(err, "Error writing HTML file.")
     })
+  })
+
+  var indexSource = fs.readFileSync(__dirname + '/templates/index.html.hbs')
+  var indexTemplate = handlebars.compile(indexSource.toString())
+  var result = indexTemplate(issues)
+  fs.writeFile('html/index.html', result, function (err) {
+    if (err) return cb(err, "Error writing HTML file.")
   })
   cb(null, 'Wrote html files.')
 
