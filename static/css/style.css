@@ -81,3 +81,12 @@ time {
 
 .badge.closed { background: #c00; }
 .badge.open { background: #5c5; }
+
+.issue .title {
+  font-weight: bold;
+}
+
+.issue .quicklink {
+  font-family: monospace;
+  font-size: 12px;
+}

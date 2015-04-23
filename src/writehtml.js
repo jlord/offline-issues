@@ -33,11 +33,11 @@ module.exports = function writehtml(options, cb) {
   issues = JSON.parse(issues)
   issues.forEach(function(issue) {
     issue = parseBody(issue)
-    var filename = repoDetails(issue.url)
+    issue.filename = repoDetails(issue.url);
     var source = fs.readFileSync(__dirname + '/templates/issue.html.hbs')
     var template = handlebars.compile(source.toString())
     var result = template(issue)
-    fs.writeFile('html/' + filename + '.html', result, function (err) {
+    fs.writeFile('html/' + issue.filename + '.html', result, function (err) {
       if (err) return cb(err, "Error writing HTML file.")
     })
   })

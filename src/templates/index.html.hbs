@@ -3,25 +3,26 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>All Issues</title>
+    <title>Offline Issues</title>
   </head>
   <body>
     <div class="container">
       <header>
         <h1>All Issues</h1>
       </header>
-      <ul class="issues">
-        {{#issues}}
-        <li>
+      <div class="issues">
+        {{#each this}}
+        <div class="issue comment">
           <div class="meta">
-            <a href="filename.html??">{{quicklink}}</a>
-            <a class="person" href="{{user.html_url}}">
-              {{user.login}}
-            </a>
+            <a href="{{filename}}.html" class="title">{{title}}</a>
+            <time>{{created_at}}</time>
           </div>
-        </li>
-        {{/issues}}
-      </ul>
+          <div class="body">
+            <span class="quicklink">{{quicklink}}</span> by {{created_by}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
 
   </body>
 </html>
