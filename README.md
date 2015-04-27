@@ -43,7 +43,7 @@ Whatever directory you are in, it will create a `md` and `html` folder with the 
 
 ## Future times
 
-Currently working at MVP level -- it gives you the issues you sepcify. But I want to add to it:
+Currently working at MVP level -- it gives you the issues you specify. But I want to add to it:
 
 - some css so the html isn't so painfully raw
 - more command line options like getting 'all' or 'closed' or 'open' or by 'author' or 'mention'
