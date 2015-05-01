@@ -39,6 +39,13 @@ $ offline-issues jlord/offline-issues muan/github-gmail#4
 
 Whatever directory you are in, it will create a `md` and `html` folder with the resulting files.
 
+## Local install
+
+- Run `npm install .` from a clone of this repository (dependencies will be added to a subdirectory)
+- The CLI can be accessed via `<path-to-clone>/src/cli.js` (instead of `offline-issues`)
+    - Alternatively, use `sudo npm link` to install the `offline-issues` executable
+- On Ubuntu, use `nodejs <path-to-clone>/src/cli.js` (or `nodejs $(which offline-issues)`) to start the CLI
+
 **TADA**
 
 ## Future times
