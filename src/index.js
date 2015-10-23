@@ -34,6 +34,7 @@ module.exports = function (token, options, cb) {
       } else {
         repoDetails.name = userAndRepo[1]
         repoDetails.issue = 'all'
+        repoDetails.state = options.state
       }
       options.repos.push(repoDetails)
     })
@@ -57,7 +58,7 @@ module.exports = function (token, options, cb) {
 }
 
   function theRequestLoop(repo, cb) {
-    var query = '/issues?page='
+    var query = '/issues?state=' + repo.state + '&page='
     var limit = '&per_page=100'
     var url = base + "/repos/" + repo.user + '/' + repo.name + query + pagenum + limit
     request(url, {json: true, headers: headers}, function(err, resp, body) {
