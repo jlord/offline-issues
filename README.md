@@ -57,6 +57,16 @@ $ offline-issues -S USER/REPO
 $ offline-issues --no-static USER/REPO
 ```
 
+To filter by issue state:
+
+```bash
+$ offline-issues -s all USER/REPO
+$ offline-issues --state all USER/REPO
+```
+
+This option accepts either ```open```, ```closed``` or ```all```. (Default: ```open```)
+Note that the filter won't be applied when issue number is specified, like ```muan/github-gmail#4```.
+
 
 ## Build / Develop Locally
 
