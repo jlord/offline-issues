@@ -22,7 +22,7 @@ module.exports = function writehtml(options, cb) {
     if (err) return cb(err, "Error writing HTML directory.")
   })
 
-  if (!options.nostatic) {
+  if (!options.noStatic) {
     var from = path.resolve(__dirname , ".." , 'static')
     cpr(from, './html', function(err, files) {
       if (err) return cb(err, "Error copying directory.")

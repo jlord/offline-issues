@@ -41,6 +41,23 @@ $ offline-issues jlord/offline-issues muan/github-gmail#4
 
 The files are written to whichever directory you are currently in. You will see a `md` and `html` folder added, each of with contains the issues you requested.
 
+## Options
+
+To just generate HTML files from existing offline cache:
+
+```bash
+$ offline-issues -h
+$ offline-issues --html
+```
+
+To skip generating static files for HTML:
+
+```bash
+$ offline-issues -S USER/REPO
+$ offline-issues --no-static USER/REPO
+```
+
+
 ## Build / Develop Locally
 
 - Clone this repository: `git clone https://github.com/jlord/offline-issues.git`
