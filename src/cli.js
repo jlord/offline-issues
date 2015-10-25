@@ -15,6 +15,12 @@ var options = require('yargs')
     describe: "Don't generate static files for HTML format",
     boolean: true
   })
+  .option('state', {
+    alias: 's',
+    describe: 'Filter by issue state',
+    choices: ['open', 'closed', 'all'],
+    default: 'open'
+  })
   .help('help')
   .argv
 
