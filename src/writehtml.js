@@ -55,7 +55,8 @@ function repoDetails(issue) {
 // we should parse them into HTML
 // before putting them in the template
 function parseBody(issue) {
-  issue.body = marked(issue.body)
+  if (issue.body === null) issue.body = ''
+  else issue.body = marked(issue.body)
   issue.comments = issue.comments.map(function(issue) {
     issue.body = marked(issue.body)
     return issue
