@@ -4,7 +4,9 @@
 
 _Get your GitHub Issues offline! In Markdown and HTML._
 
-This is a command line application, using [Node.js](http://nodejs.org/), that fetches the GitHub Issue/s you specify and writes them as files to computer in both HTML and markdown formats. This way you can view them without an internet connection.
+This is a command line application, using [Node.js](http://nodejs.org/), that fetches the GitHub Issue/s you specify and writes them to files on your computer in both HTML and markdown formats. This way you can view them without an internet connection.
+
+**This will cap issues at the first 250.**
 
 ![screenshot](screenshot.png)
 
