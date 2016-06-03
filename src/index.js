@@ -1,28 +1,30 @@
-var request = require('request')
 var fs = require('fs')
+
+var request = require('request')
+
 var runParallel = require('run-parallel')
 var writemarkdown = require('./writemarkdown.js')
 var writehtml = require('./writehtml.js')
 
 var base = 'https://api.github.com'
-var headers = {"user-agent": "offline-issues module"}
+var headers = {'user-agent': 'offline-issues module'}
 
 module.exports = function (token, options, cb) {
   var issueData = []
   var pagenum = 1
   var allIssues = []
 
-  headers["Authorization"] = 'token ' + token.token
+  headers['Authorization'] = 'token ' + token.token
   if (options._.length === 0 && options.html) {
     return writehtml(options, cb)
   }
-  if (options._.length === 0) return cb(null, "No repository given.")
+  if (options._.length === 0) return cb(null, 'No repository given.')
   parseRepo(options, cb)
 
-  function parseRepo(options, cb) {
+  function parseRepo (options, cb) {
     options.repos = []
 
-    options._.forEach(function(repo) {
+    options._.forEach(function (repo) {
       var repoDetails = {}
       repoDetails.full = repo
       var userAndRepo = repo.split('/')
@@ -38,35 +40,36 @@ module.exports = function (token, options, cb) {
       }
       options.repos.push(repoDetails)
     })
-    var functionsToDo = options.repos.map(function(repo) {
-      return function(cb) {
+    var functionsToDo = options.repos.map(function (repo) {
+      return function (cb) {
         getIssues(repo, cb)
       }
     })
-    runParallel(functionsToDo, function(err) {
+    runParallel(functionsToDo, function (err) {
+      if (err) return cb(err, 'Error running in parallel.')
       writeData(options, cb)
     })
   }
 
-  function getIssues(repo, cb) {
+  function getIssues (repo, cb) {
     if (repo.issue === 'all') return theRequestLoop(repo, cb)
     var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue
-    request(url, {json: true, headers: headers}, function(err, resp, body) {
-      if (err) return cb(err, "Error in request for issue.")
+    request(url, { json: true, headers: headers }, function (err, resp, body) {
+      if (err) return cb(err, 'Error in request for issue.')
       loadIssue(body, repo, cb)
     })
-}
+  }
 
-  function theRequestLoop(repo, cb) {
+  function theRequestLoop (repo, cb) {
     var query = '/issues?state=' + repo.state + '&page='
     var limit = '&per_page=100'
-    var url = base + "/repos/" + repo.user + '/' + repo.name + query + pagenum + limit
-    request(url, {json: true, headers: headers}, function(err, resp, body) {
-      if (err) return cb(err, "Error in request for issue.")
+    var url = base + '/repos/' + repo.user + '/' + repo.name + query + pagenum + limit
+    request(url, { json: true, headers: headers }, function (err, resp, body) {
+      if (err) return cb(err, 'Error in request for issue.')
       if (body.message) return cb(null, body)
       if (body.length === 0) {
-        var functionsToDo = allIssues.map(function(issue) {
-          return function(cb) {
+        var functionsToDo = allIssues.map(function (issue) {
+          return function (cb) {
             loadIssue(issue, repo, cb)
           }
         })
@@ -74,17 +77,16 @@ module.exports = function (token, options, cb) {
         return
       } else {
         if (body.message) return cb(null, body)
-        body.forEach(function(issue) {
+        body.forEach(function (issue) {
           return allIssues.push(issue)
         })
         pagenum++
         getIssues(repo, cb)
       }
-  })
-}
+    })
+  }
 
-
-  function loadIssue(body, repo, cb) {
+  function loadIssue (body, repo, cb) {
     var issue = {}
 
     issue.id = body.id
@@ -96,26 +98,27 @@ module.exports = function (token, options, cb) {
     issue.state = body.state
     issue.comments = []
     issue.comments_url = body.comments_url
-    issue.milestone = body.milestone ? body.milestone.title : null;
+    issue.milestone = body.milestone ? body.milestone.title : null
 
     if (repo.issue === 'all') {
-      issue.quicklink = repo.full + "#" + body.html_url.split('/').pop()
+      issue.quicklink = repo.full + '#' + body.html_url.split('/').pop()
     } else issue.quicklink = repo.full
 
     getComments(issue, repo, cb)
   }
 
-  function getComments(issue, repo, cb) {
+  function getComments (issue, repo, cb) {
+    var url = ''
     if (repo.issue === 'all') {
-      var url = issue.comments_url
+      url = issue.comments_url
     } else {
-      var url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
+      url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
     }
-    request(url, {json: true, headers: headers}, function(err, resp, body) {
-      if (err) return cb(err, "Error in request for comments.")
+    request(url, { json: true, headers: headers }, function (err, resp, body) {
+      if (err) return cb(err, 'Error in request for comments.')
 
       issue.comments = body
-      issue.comments.forEach(function(comment) {
+      issue.comments.forEach(function (comment) {
         comment.created_at = new Date(comment.created_at).toLocaleDateString()
       })
       issueData.push(issue)
@@ -123,10 +126,10 @@ module.exports = function (token, options, cb) {
     })
   }
 
-  function writeData(options, cb) {
+  function writeData (options, cb) {
     var data = JSON.stringify(issueData, null, ' ')
     fs.writeFile('comments.json', data, function (err) {
-      if (err) return cb(err, "Error in writing data file.")
+      if (err) return cb(err, 'Error in writing data file.')
       cb(null, 'Wrote data.')
       writemarkdown(cb)
       writehtml(options, cb)

@@ -1,5 +1,7 @@
 # offline-issues
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 _Get your GitHub Issues offline! In Markdown and HTML._
 
 This is a command line application, using [Node.js](http://nodejs.org/), that fetches the GitHub Issue/s you specify and writes them as files to computer in both HTML and markdown formats. This way you can view them without an internet connection.
