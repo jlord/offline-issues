@@ -130,7 +130,10 @@ module.exports = function (token, options, cb) {
     var data = JSON.stringify(issueData, null, ' ')
     fs.writeFile('comments.json', data, function (err) {
       if (err) return cb(err, 'Error in writing data file.')
-      cb(null, 'Wrote data.')
+      var count = JSON.parse(data).length
+      if (count > 250) {
+        return console.log('Sorry, I can only process less than 250 issues total. You have', count + '.')
+      }
       writemarkdown(cb)
       writehtml(options, cb)
     })
