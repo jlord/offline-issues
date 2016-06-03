@@ -25,12 +25,9 @@ var options = require('yargs')
   .argv
 
 var ghAuthOptions = {
- // ~/.config/[configName].json will store the token
-configName : 'offline-issues',
-// (optional) whatever GitHub auth scopes you require
-scopes     : [ 'repo' ],
-// (optional) saved with the token on GitHub
-note       : 'This token is for the offline-issues module from NPM'
+ configName: 'offline-issues', // ~/.config/[configName].json will store the token
+ scopes: [ 'repo' ], // (optional) whatever GitHub auth scopes you require
+ note: 'This token is for the offline-issues module from NPM' // (optional) saved with the token on GitHub
 }
 
 ghauth(ghAuthOptions, function(err, token) {
