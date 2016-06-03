@@ -24,8 +24,9 @@ module.exports = function writehtml(options, cb) {
 
   if (!options.noStatic) {
     var from = path.resolve(__dirname , ".." , 'static')
-    cpr(from, './html', function(err, files) {
+    cpr(from, './html', { overwrite: true }, function(err, files) {
       if (err) return cb(err, "Error copying directory.")
+      // TODO this may finish after making the HTML files does
     })
   }
 
