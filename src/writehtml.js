@@ -70,7 +70,7 @@ function writeIndex (issues, cb) {
 
 function repoName (issues) {
   var a = issues[0].url.split('/')
-  var name = a[3] + '-' + a[4]
+  var name = a[3] + '/' + a[4]
   return name
 }
 
