@@ -32,6 +32,13 @@ module.exports = function writehtml (options, cb) {
 
   var issues = fs.readFileSync('comments.json')
   issues = JSON.parse(issues)
+
+  writeIssues(issues, cb)
+  writeIndex(issues, cb)
+  cb(null, 'Wrote html files.')
+}
+
+function writeIssues (issues, cb) {
   issues.forEach(function (issue) {
     issue = parseBody(issue)
     var filename = repoDetails(issue.url)
@@ -39,10 +46,32 @@ module.exports = function writehtml (options, cb) {
     var template = handlebars.compile(source.toString())
     var result = template(issue)
     fs.writeFile('html/' + filename + '.html', result, function (err) {
-      if (err) return cb(err, 'Error writing HTML file.')
+      if (err) return cb(err, 'Error writing HTML issue file.')
     })
   })
-  cb(null, 'Wrote html files.')
+}
+
+function writeIndex (issues, cb) {
+  var source = fs.readFileSync(path.join(__dirname, '/templates/index.hbs'))
+  var template = handlebars.compile(source.toString())
+
+  issues.forEach(function (issue) {
+    issue.offlineUrl = repoDetails(issue.url)
+  })
+
+  var result = template({
+    issues: issues,
+    title: repoName(issues)
+  })
+  fs.writeFile('html/index.html', result, function (err) {
+    if (err) return cb(err, 'Error writing HTML index file.')
+  })
+}
+
+function repoName (issues) {
+  var a = issues[0].url.split('/')
+  var name = a[3] + '-' + a[4]
+  return name
 }
 
 function repoDetails (issue) {
