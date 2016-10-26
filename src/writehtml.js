@@ -30,14 +30,17 @@ module.exports = function writehtml (options, cb) {
     })
   }
 
-  var issues = fs.readFileSync('comments.json')
-  issues = JSON.parse(issues)
+  var repositories = getRepositories()
 
-  writeIssues(issues, cb)
-  writeIndex(issues, cb)
+  writeIndex(repositories, cb)
+  repositories.forEach(function (repository) {
+    writeIssues(repository.issues, cb)
+  })
+
   cb(null, 'Wrote html files.')
 }
 
+// Writers
 function writeIssues (issues, cb) {
   issues.forEach(function (issue) {
     issue = parseBody(issue)
@@ -51,25 +54,60 @@ function writeIssues (issues, cb) {
   })
 }
 
-function writeIndex (issues, cb) {
+function writeIndex (repositories, cb) {
   var source = fs.readFileSync(path.join(__dirname, '/templates/index.hbs'))
   var template = handlebars.compile(source.toString())
 
-  issues.forEach(function (issue) {
-    issue.offlineUrl = repoDetails(issue.url)
+  repositories.forEach(function (repository) {
+    repository.issues.forEach(function (issue) {
+      issue.offlineUrl = repoDetails(issue.url)
+    })
   })
 
-  var result = template({
-    issues: issues,
-    title: repoName(issues)
-  })
+  var result = template({ repositories: repositories })
   fs.writeFile('html/index.html', result, function (err) {
     if (err) return cb(err, 'Error writing HTML index file.')
   })
 }
 
-function repoName (issues) {
-  var a = issues[0].url.split('/')
+// Parsers
+function getRepositories () {
+  var comments = getComments()
+  var repositories = []     // Array of repository objects
+  var repositoryNames = {}  // Index of repositories (name => index)
+  comments.forEach(function (comment) {
+    var name = repoName(comment)
+    // Initialize a repo object if necessary
+    if (!(name in repositoryNames)) {
+      repositoryNames[name] = repositories.length
+      repositories.push({
+        name: name,
+        issues: []
+      })
+    }
+    // Push the comment into the repo's issue array
+    var repositoryIndex = repositoryNames[name]
+    repositories[repositoryIndex].issues.push(comment)
+  })
+  return repositories
+}
+
+function getComments() {
+  var rawComments = fs.readFileSync('comments.json')
+  var parsedComments = JSON.parse(rawComments)
+  var comments = []       // Returnable array of comments
+  var commentsIndex = {}  // Used to determine uniqueness
+  parsedComments.forEach(function (comment) {
+    if (comment.id in commentsIndex) return
+    commentsIndex[comment.id] = true
+    comments.push(comment)
+  })
+  return comments
+}
+
+// Helpers
+function repoName (comment) {
+  var a = comment.url.split('/')
   var name = a[3] + '/' + a[4]
   return name
 }
