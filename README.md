@@ -43,7 +43,7 @@ $ offline-issues USER/REPO USER/REPO#0
 $ offline-issues jlord/offline-issues muan/github-gmail#4
 ```
 
-The files are written to whichever directory you are currently in. You will see a `md` and `html` folder added, each of with contains the issues you requested.
+The files are written to whichever directory you are currently in. You will see a `md` and `html` folder added, each of which contains the issues you requested.
 
 ## Options
 
