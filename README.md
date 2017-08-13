@@ -90,5 +90,5 @@ Currently working at MVP level -- it gives you the issues you specify. But I wan
 - More command line options like getting 'all' or 'closed' or 'open' or by 'author' or 'mention'.
 - Directory/Index of files you have.
 - Tests.
-- Spin up sever.
+- Spin up server.
 - Sync up the issues you currently have at a later date.
