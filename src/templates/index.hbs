@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="lib/jquery.js"></script>
+    <script type="text/javascript" src="lib/jquery.emoji.js"></script>
+    <title>Offline Issues</title>
+  </head>
+  <body>
+    <div class="container">
+      {{#repositories}}
+      <div class="repository">
+        <header>
+          <h1>{{name}}</h1>
+        </header>
+        <div class="issues">
+          {{#issues}}
+          <div class="issue">
+            <a href="{{offlineUrl}}.html">
+              <h2>{{title}}</h2>
+            </a>
+            <span class="badge {{state}}">{{state}}</span>
+            <a class="person" href="https://github.com/{{created_by}}">{{created_by}}</a>
+            <time>{{created_at}}</time>
+          </div>
+          {{/issues}}
+        </div>
+      </div>
+      {{/repositories}}
+    </div>
+  </body>
+</html>
