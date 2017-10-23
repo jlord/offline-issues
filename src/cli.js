@@ -5,6 +5,10 @@ var getIssues = require('./index.js')
 
 var options = require('yargs')
   .usage('Usage: $0 [options] [repository ...]')
+  .option('destination', {
+    alias: 'd',
+    describe: 'Change destination of the generated files'
+  })
   .option('html', {
     alias: 'h',
     describe: 'If no repository given, generate HTML from existing offline cache',
