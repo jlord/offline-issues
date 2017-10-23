@@ -61,6 +61,13 @@ $ offline-issues -S USER/REPO
 $ offline-issues --no-static USER/REPO
 ```
 
+To save generated files in different location:
+
+```bash
+$ offline-issues -d DIRECTORY USER/REPO
+$ offline-issues --destination DIRECTORY USER/REPO
+```
+
 To filter by issue state:
 
 ```bash

@@ -18,13 +18,19 @@ marked.setOptions({
 })
 
 module.exports = function writehtml (options, cb) {
-  mkdirp('html', function (err) {
+  if (options.destination) {
+    var dest = path.resolve(options.destination, 'html')
+  } else {
+    var dest = 'html'
+  }
+
+  mkdirp(dest, function (err) {
     if (err) return cb(err, 'Error writing HTML directory.')
   })
 
   if (!options.noStatic) {
     var from = path.resolve(__dirname, '..', 'static')
-    cpr(from, './html', { overwrite: true }, function (err, files) {
+    cpr(from, dest, { overwrite: true }, function (err, files) {
       if (err) return cb(err, 'Error copying directory.')
       // TODO this may finish after making the HTML files does
     })
@@ -38,7 +44,7 @@ module.exports = function writehtml (options, cb) {
     var source = fs.readFileSync(path.join(__dirname, '/templates/html.hbs'))
     var template = handlebars.compile(source.toString())
     var result = template(issue)
-    fs.writeFile('html/' + filename + '.html', result, function (err) {
+    fs.writeFile(dest + '/' + filename + '.html', result, function (err) {
       if (err) return cb(err, 'Error writing HTML file.')
     })
   })
