@@ -108,22 +108,55 @@ module.exports = function (token, options, cb) {
   }
 
   function getComments (issue, repo, cb) {
-    var url = ''
-    if (repo.issue === 'all') {
-      url = issue.comments_url
-    } else {
-      url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments'
-    }
-    request(url, { json: true, headers: headers }, function (err, resp, body) {
-      if (err) return cb(err, 'Error in request for comments.')
+    issue.comments = []
 
-      issue.comments = body
-      issue.comments.forEach(function (comment) {
-        comment.created_at = new Date(comment.created_at).toLocaleDateString()
-      })
-      issueData.push(issue)
-      cb()
-    })
+    var get_issues_since = function(since)
+    {
+      var url = ''
+      var query = since === '' ? '' : '?since=' + since
+
+      if (repo.issue === 'all') {
+        url = issue.comments_url + query
+      } else {
+        url = base + '/repos/' + repo.user + '/' + repo.name + '/issues/' + repo.issue + '/comments' + query
+      }
+
+      //console.log('request ' + query)
+
+      var on_response = function (err, resp, body) {
+        if (err) return cb(err, 'Error in request for comments.')
+        var comments = body
+
+        /* remove duplicates */
+        var dups = 0;
+        if (issue.comments.length > 0 && comments.length > 0) {
+          var last_id = issue.comments[issue.comments.length - 1].id
+          while (comments.length > 0 && comments[0].id <= last_id) {
+            comments.shift()
+            ++dups
+          }
+        }
+        //console.log('got ' + comments.length + ' new comments'
+        //  + (dups ? ' (' + dups + ' duplicates was dropped)' : ''));
+
+        issue.comments = issue.comments.concat(comments)
+        if (comments.length <= 1) {
+          //console.log('total got ' + issue.comments.length + ' comments')
+          issue.comments.forEach(function (comment) {
+            comment.created_at = new Date(comment.created_at).toLocaleDateString()
+          })
+          issueData.push(issue)
+          cb()
+        } else {
+          var last = issue.comments[issue.comments.length - 1]
+          get_issues_since(last.created_at)
+        }
+      }
+
+      request(url, { json: true, headers: headers }, on_response)
+    }
+
+    get_issues_since('')
   }
 
   function writeData (options, cb) {
