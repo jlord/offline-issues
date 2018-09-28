@@ -25,6 +25,10 @@ var options = require('yargs')
     choices: ['open', 'closed', 'all'],
     default: 'open'
   })
+  .option("onefile", {
+    describe: "Bundle issue into a single file",
+    boolean: false
+  })
   .help('help')
   .argv
 
